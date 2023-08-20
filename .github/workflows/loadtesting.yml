@@ -1,8 +1,11 @@
-# File: .github/workflows/workflow.yml
+name: LoadTestingWorkflow
 
 on: 
   workflow_dispatch:
-
+env:
+  RESOURCE_GROUP: 'CommonSenseDevsRg'
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  AZURE_LOAD_TESTING_RESOURCE_NAME: 'AzureLoadTestingServiceForDemo'
 
 jobs:
   # This workflow contains a single job called "loadtest"
@@ -12,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout GitHub Actions 
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
           
       - name: Login to Azure
         uses: azure/login@v1
@@ -23,6 +26,6 @@ jobs:
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:
-          loadTestConfigFile: 'SampleApp.yaml'
-          loadTestResource: 'loadTestResourceName'
-          resourceGroup: 'loadTestResourceGroup'
+          loadTestConfigFile: 'LoadTestConfig.yaml'
+          loadTestResource: ${{ env.AZURE_LOAD_TESTING_RESOURCE_NAME }}
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
